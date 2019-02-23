@@ -125,17 +125,17 @@ sub search {
 #print STDERR "\n# html=[\n$html\n]\n";
 
     my $data;
-    ($data->{isbn13})           = $html =~ m!<li itemprop="ISBN13">\s*<strong>ISBN13:</strong>\s*(.*?)</li>!si;
-    ($data->{isbn10})           = $html =~ m!<li itemprop="ISBN10">\s*<strong>ISBN10:</strong>\s*(.*?)</li>!si;
+    ($data->{isbn13})           = $html =~ m!<li itemprop=isbn>\s*<strong>ISBN13:</strong>\s*(.*?)</li>!si;
+    ($data->{isbn10})           = $html =~ m!<li >\s*<strong>ISBN10:</strong>\s*(.*?)</li>!si;
     ($data->{publisher})        = $html =~ m!<span class="bold ">Publisher:\s*</span><span><a href="[^"]+" style="text-decoration:underline;">([^<]+)</a></span>!si;
-    ($data->{pubdate})          = $html =~ m!<li itemprop="publication date">\s*<strong>publication date:</strong>\s*(.*?)</li>!si;
+    ($data->{pubdate})          = $html =~ m!<li itemprop=datePublished>\s*<strong>publication date:</strong>\s*(.*?)</li>!si;
     ($data->{title})            = $html =~ m!<h1 itemprop="name" id="product_title">([^<]*)</h1>!si;
     ($data->{binding})          = $html =~ m!<div id="product_title_container">.*?<em class="secondary">([^<]+)</em></div>!si;
-    ($data->{binding})          = $html =~ m!<li itemprop="Format">\s*<strong>Format:</strong>\s*(.*?)</li>!si  unless($data->{binding});
-    ($data->{pages})            = $html =~ m!<li itemprop="Number Of Pages">\s*<strong>Number Of Pages:</strong>\s*(.*?)</li>!si;
+    ($data->{binding})          = $html =~ m!<li itemprop=bookFormat>\s*<strong>Format:</strong>\s*(.*?)</li>!si  unless($data->{binding});
+    ($data->{pages})            = $html =~ m!<li itemprop=NumberOfPages>\s*<strong>Number Of Pages:</strong>\s*(.*?)</li>!si;
     ($data->{author})           = $html =~ m!<span class="secondary"><strong>By:</strong>(.*?)</span>!si;
     ($data->{image})            = $html =~ m!<meta itemprop="image" content="([^"]*)">!si;
-    ($data->{description})      = $html =~ m!<meta name="description" content="([^"]*)" />!si;
+    ($data->{description})      = $html =~ m!<h3><span>Description</span></h3>\s*<span>([^<]*)</span>!si;
 
     if($data->{image}) {
         $data->{thumb} = $data->{image};
@@ -145,7 +145,7 @@ sub search {
     # currently not provided
     ($data->{width})            = $html =~ m!<span class="bold ">Width:\s*</span><span>([^<]+)</span>!si;
     ($data->{height})           = $html =~ m!<span class="bold ">Height:\s*</span><span>([^<]+)</span>!si;
-    ($data->{weight})           = $html =~ m!<li itemprop="weight">\s*<strong>weight:</strong>\s*(.*?)</li>!s;
+    ($data->{weight})           = $html =~ m!<li >\s*<strong>weight:</strong>\s*(.*?)</li>!s;
 
     $data->{width}  = int($data->{width})   if($data->{width});
     $data->{height} = int($data->{height})  if($data->{height});
@@ -189,7 +189,7 @@ sub search {
 		'weight'		=> $data->{weight},
 		'width'		    => $data->{width},
 		'height'		=> $data->{height},
-        'html'          => $html
+#        'html'          => $html
 	};
 
 #use Data::Dumper;
